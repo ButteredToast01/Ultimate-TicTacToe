@@ -1,0 +1,126 @@
+<h1>Ultimate Tic Tac Toe</h1>
+<div id="turn">Turn: X</div>
+<div id="board"></div>
+<div id="message"></div>
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 660px;
+  margin: 20px auto;
+}
+
+.small-board {
+  display: grid;
+  grid-template-coloums: repeat(3, 1fr);
+  border: 3px solid black;
+  gap: 2px;
+  width: 200px;
+  height: 200px;
+  position: relative;
+}
+
+.cell {
+  border: 1px solid #888;
+  background: white;
+  font-size: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.won-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(200, 200, 200, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 80px;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+const boardElement = document.getElementById('board');
+const turnElement = document.getElementById('turn');
+const messageElement = document.getElementById('message');
+
+let currentPlayer = 'X';
+let boards = []; // 9 small boards
+let boardStatus = Array(9).fill(null); // null, 'X', 'O', or 'draw'
+let nextBoard = null; // determines which small boards is active
+
+for (let i = 0; i < 9; i++) {
+  const small = document.createElement('div');
+  small.classList.add('small-board');
+  small.dataset.index = i;
+  boards[i] = Array(9).fill(null);
+
+  for (let j = 0; j < 9; j++) {
+  const cell = document.createElement('div');
+  cell.classList.add('cell');
+  cell.dataset.index = j;
+  cell.dataset.board = i;
+  cell.addEventListener('click', cellClick);
+  small.appendChild(cell);
+  }
+  boardElement.appendChild(small);
+}
+
+function cellClick(e) {
+  const boardIndex = parseInt(e.target.dataset.board);
+  const cellIndex = parseInt(e.target.dataset.index);
+
+  if (boardStatus[boardIndex] || boards[boardIndex][cellIndex] || (nextBoard !== null && boardIndex !== nextBoard)) {
+    return; //invalid move
+  }
+
+  boards[boardIndex][cellIndex] = currentPlayer;
+  e.target.textContent = currentPlayer;
+
+const winner = checkWinner(boards[boardIndex]);
+if (winner) {
+  boardStatus[boardIndex] = winner;
+  const overlay = document.createElement('div');
+  overlay.classList.add('won-overlay');
+  overlay.textContent = winner;
+  e.target.parentElement.appendChild(overlay);
+} else if (boards[boardIndex].every(c => c)) {
+  boardStatus[boardIndex] = 'draw';
+}
+
+const bigWinner = checkWinner(boardStatus.map(s => s==='draw'?null:s));
+if (bigWinner) {
+    messageElement.textContent = 'Player ${bigWinner} wins the game!';
+    turnElement.textContent = '';
+    return;
+} else if (boardStatus.every(s => s)) {
+  messageElement.textContent = 'Draw!';
+  turnElement.textContent = '';
+  return;
+}
+
+if (boardStatus[cellIndex]) {
+  nextBoard = null; //free move
+} else {
+  nextBoard = cellIndex;
+}
+
+currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+turnElement.textContent = `Turn: ${currentPlayer}`
+
+function checkWinner(cells) {
+  const lines = [
+    [0,1,2],[3,4,5],[6,7,8], //rows
+    [0,3,6],[1,4,7],[2,5,8] //coloumns
+    [0,4,8],[2,4,6] //diagonals
+  ];
+  for (const [a,b,c] of lines) {
+    if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) return cells[a];
+  }
+  return null;
+}

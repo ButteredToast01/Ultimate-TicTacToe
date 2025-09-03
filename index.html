@@ -111,7 +111,7 @@ function cellClick(e) {
   // Check if big board is won
   const bigWinner = checkWinner(boardStatus.map(s => s==='draw'?null:s));
   if (bigWinner) {
-    messageElement.textContent = `Player ${bigWinner} wins the game! 🎉`;
+    messageElement.textContent = `🎉 Player ${bigWinner} wins the game! 🎉`;
     turnElement.textContent = '';
     return;
   } else if (boardStatus.every(s => s)) {

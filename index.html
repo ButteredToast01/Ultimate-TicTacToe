@@ -49,6 +49,11 @@
     font-weight: bold;
     pointer-events: none;
   }
+
+.active-board {
+  outline: 4px solid orange; /* highlights the active small board */
+}
+  
 </style>
 </head>
 <body>
@@ -126,12 +131,34 @@ function cellClick(e) {
   } else {
     nextBoard = cellIndex;
   }
-
+  
   // Switch players
   currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
   turnElement.textContent = `Turn: ${currentPlayer}`;
+
+  //Highlight active board
+  updateActiveBoard();
 }
 
+updateActiveBoard();
+
+function updateActiveBoard() {
+  const smallBoards = document.querySelectorAll('.small-board');
+  smallBoards.forEach((board, i) => {
+    board.classList.remove('active-board'); // remove previous highlight
+    if (nextBoard === null && !boardStatus[i]) {
+      // If free move, highlight all boards that are not won
+      board.classList.add('active-board');
+    } else if (nextBoard === i && !boardStatus[i]) {
+      // Highlight only the next board
+      board.classList.add('active-board');
+    }
+  });
+}
+
+
+  
+  
 // Function to check winner in a 3x3 board
 function checkWinner(cells) {
   const lines = [

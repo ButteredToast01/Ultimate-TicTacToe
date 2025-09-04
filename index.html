@@ -30,12 +30,16 @@
   .cell {
     border: 1px solid #888;
     background: white;
-    font-size: 36px;
+    font-size: 28px;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     user-select: none;
+    width: 100%; /* make cell always fill its grid space */
+    height: 100%; /* lock the height */
+    box-sizing: border-box; /* include border in size calculation */
+    overflow: hidden; /* prevents content from spilling out */
   }
   .won-overlay {
     position: absolute;

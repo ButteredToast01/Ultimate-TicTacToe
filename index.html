@@ -163,7 +163,7 @@ function cellClick(e) {
     e.target.parentElement.appendChild(overlay);
 
     // Class for background colour / styling
-    e.target.parentElment.classList.add(`${winner}-won`);
+    e.target.parentElement.classList.add(`${winner}-won`);
     
   } else if (boards[boardIndex].every(c => c)) {
     boardStatus[boardIndex] = 'draw';

@@ -74,6 +74,9 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
+  .won-overlay.X { color: #FF4136; } /* Red for X */
+  .won-overlay.O { color: #0074D9; } /* Blue for O */
+  .won-overlay.draw { color: gray; } /* Gray for draw */
 
   .cell.X { color: #FF4136; } /* Red X */
   .cell.O { color: #0074D9; } /* Blue O */
@@ -157,7 +160,7 @@ function cellClick(e) {
 
     //Show overlay
     const overlay = document.createElement('div');
-    overlay.classList.add('won-overlay');
+    overlay.classList.add('won-overlay', winner);
     overlay.textContent = winner;
     e.target.parentElement.appendChild(overlay);
 

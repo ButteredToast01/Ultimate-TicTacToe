@@ -79,7 +79,9 @@
   .cell.X { color: #FF4136; } /* Red X */
   .cell.O { color: #0074D9; } /* Blue O */
 
-  e.target.classList.add(currentPlayer); /* adds X or O class to the cell */
+  .small-board.X-won {
+    background-color: rgba(0, 0, 255, 0.1);
+  }
   
 </style>
 </head>
@@ -150,10 +152,16 @@ function cellClick(e) {
   const winner = checkWinner(boards[boardIndex]);
   if (winner) {
     boardStatus[boardIndex] = winner;
+
+    //Show overlay
     const overlay = document.createElement('div');
     overlay.classList.add('won-overlay');
     overlay.textContent = winner;
     e.target.parentElement.appendChild(overlay);
+
+    // Class for background colour / styling
+    e.target.parentElment.classList.add(`${winner}-won`);
+    
   } else if (boards[boardIndex].every(c => c)) {
     boardStatus[boardIndex] = 'draw';
   }

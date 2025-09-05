@@ -28,7 +28,7 @@
   .small-board {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);   /* 👈 lock row heights */
+    grid-template-rows: repeat(3, 1fr); /* Lock row heights */
     border: 3px solid black;
     gap: 2px;
     width: 200px;
@@ -36,23 +36,23 @@
     position: relative;
   }
 
-  /* Highlight the active board without changing layout */
+  /* Highlights the active board small board */
   .active-board {
-    outline: 4px solid orange;            /* 👈 outline doesn’t affect size */
+    outline: 4px solid orange;
   }
 
   /* Individual cell */
   .cell {
     border: 1px solid #888;
     background: white;
-    font-size: 28px;                       /* comfy size for 66×66 cells */
+    font-size: 28px; /* Comfy size for 66×66 cells */
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     user-select: none;
 
-    /* 👇 ensure content never changes cell size */
+    /* Ensures content never changes cell size */
     width: 100%;
     height: 100%;
     min-width: 0;
@@ -71,7 +71,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 60px;                       /* slightly smaller so it fits */
+    font-size: 60px; 
     font-weight: bold;
     pointer-events: none;
   }

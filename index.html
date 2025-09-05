@@ -76,12 +76,8 @@
     pointer-events: none;
   }
 
-  .cell.X {
-    color: #FF4136; /* Red X */
-  }
-  .cell.O {
-    color: #0074D9; /* Blue O */
-  }
+  .cell.X { color: #FF4136; } /* Red X */
+  .cell.O { color: #0074D9; } /* Blue O */
 
   e.target.classList.add(currentPlayer); /* adds X or O class to the cell */
   
@@ -148,6 +144,7 @@ function cellClick(e) {
   // Place the mark
   boards[boardIndex][cellIndex] = currentPlayer;
   e.target.textContent = currentPlayer;
+  e.target.classList.add(currentPlayer); /* adds X or O class to the cell */
 
   // Check small board result
   const winner = checkWinner(boards[boardIndex]);

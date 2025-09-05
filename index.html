@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <title>Ultimate Tic Tac Toe</title>
 <style>
+  * {
+    box-sizing: border-box; /* avoids border size issues */
+  }
   body {
     font-family: Arial, sans-serif;
     text-align: center;
@@ -30,7 +33,7 @@
   .cell {
     border: 1px solid #888;
     background: white;
-    font-size: 36px;
+    font-size: 2.5em;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -50,10 +53,9 @@
     pointer-events: none;
   }
 
-.active-board {
-  outline: 4px solid orange; /* highlights the active small board */
-}
-  
+  .active-board {
+    outline: 4px solid orange; /* highlights the active small board */
+  }
 </style>
 </head>
 <body>
@@ -70,7 +72,7 @@ const messageElement = document.getElementById('message');
 let currentPlayer = 'X';
 let boards = []; // 9 small boards
 let boardStatus = Array(9).fill(null); // null, 'X', 'O', or 'draw'
-let nextBoard = null; // determines which small board is active
+let nextBoard = null; // null = highlight all boards at start
 
 // Create 9 small boards
 for (let i = 0; i < 9; i++) {
@@ -91,13 +93,19 @@ for (let i = 0; i < 9; i++) {
 }
 
 function cellClick(e) {
+  // If the game is already over, do nothing
+  if (messageElement.textContent) return;
+
   const boardIndex = parseInt(e.target.dataset.board);
   const cellIndex = parseInt(e.target.dataset.index);
 
-  if (boardStatus[boardIndex] || boards[boardIndex][cellIndex] || (nextBoard !== null && boardIndex !== nextBoard)) {
-    return; // invalid move
+  // Invalid move: board already won/drawn, cell already filled, or wrong active board
+  if (boardStatus[boardIndex] || boards[boardIndex][cellIndex] || 
+      (nextBoard !== null && boardIndex !== nextBoard)) {
+    return;
   }
 
+  // Place mark
   boards[boardIndex][cellIndex] = currentPlayer;
   e.target.textContent = currentPlayer;
 
@@ -105,16 +113,22 @@ function cellClick(e) {
   const winner = checkWinner(boards[boardIndex]);
   if (winner) {
     boardStatus[boardIndex] = winner;
-    const overlay = document.createElement('div');
-    overlay.classList.add('won-overlay');
-    overlay.textContent = winner;
-    e.target.parentElement.appendChild(overlay);
-  } else if (boards[boardIndex].every(c => c)) {
+
+    // Only add overlay if it doesn't already exist
+    if (!e.target.parentElement.querySelector('.won-overlay')) {
+      const overlay = document.createElement('div');
+      overlay.classList.add('won-overlay');
+      overlay.textContent = winner;
+      e.target.parentElement.appendChild(overlay);
+    }
+  } 
+  // Check if the small board is a draw
+  else if (boards[boardIndex].every(c => c !== null)) {
     boardStatus[boardIndex] = 'draw';
   }
 
   // Check if big board is won
-  const bigWinner = checkWinner(boardStatus.map(s => s==='draw'?null:s));
+  const bigWinner = checkWinner(boardStatus.map(s => s === 'draw' ? null : s));
   if (bigWinner) {
     messageElement.textContent = `🎉 Player ${bigWinner} wins the game! 🎉`;
     turnElement.textContent = '';
@@ -125,40 +139,35 @@ function cellClick(e) {
     return;
   }
 
-  // Determine next board
+  // Determine next active board
   if (boardStatus[cellIndex]) {
     nextBoard = null; // free move
   } else {
     nextBoard = cellIndex;
   }
-  
+
   // Switch players
   currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
   turnElement.textContent = `Turn: ${currentPlayer}`;
 
-  //Highlight active board
+  // Highlight active board(s)
   updateActiveBoard();
 }
-
-updateActiveBoard();
 
 function updateActiveBoard() {
   const smallBoards = document.querySelectorAll('.small-board');
   smallBoards.forEach((board, i) => {
     board.classList.remove('active-board'); // remove previous highlight
     if (nextBoard === null && !boardStatus[i]) {
-      // If free move, highlight all boards that are not won
+      // Free move (or start): highlight all available boards
       board.classList.add('active-board');
     } else if (nextBoard === i && !boardStatus[i]) {
-      // Highlight only the next board
+      // Highlight only the chosen board
       board.classList.add('active-board');
     }
   });
 }
 
-
-  
-  
 // Function to check winner in a 3x3 board
 function checkWinner(cells) {
   const lines = [
@@ -171,6 +180,9 @@ function checkWinner(cells) {
   }
   return null;
 }
+
+// Start with highlights on all boards
+updateActiveBoard();
 </script>
 </body>
 </html>

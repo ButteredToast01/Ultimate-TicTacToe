@@ -63,8 +63,9 @@
   }
 
   /* Small board backgrounds when won */
-  .small-board.X-won { background-color: rgba(255, 0, 0, 0.2); } /* Red tint */
-  .small-board.O-won { background-color: rgba(0, 0, 255, 0.2); } /* Blue tint */
+  .small-board.X-won { background-color: rgba(255, 0, 0, 0.4); } /* Red tint */
+  .small-board.O-won { background-color: rgba(0, 0, 255, 0.4); } /* Blue tint */
+  .small-board.draw { background-color: rgba(128, 128, 128, 0.4); } /* Grey tint */
   
   /* Overlay of symbol */
   .won-overlay {
@@ -166,6 +167,11 @@ function cellClick(e) {
     
   } else if (boards[boardIndex].every(c => c)) {
     boardStatus[boardIndex] = 'draw';
+    e.target.parentElement.classList.add('draw');
+    const overlay = document.createElement('div');
+    overlay.classList.add('won-overlay', 'draw');
+    overlay.textContent = ' ';
+    e.target.parentElement.appendChild(overlay);
   }
 
   // Check big board result

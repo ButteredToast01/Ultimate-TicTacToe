@@ -62,32 +62,28 @@
     white-space: nowrap;
   }
 
-  /* Overlay when a small board is won */
+  /* Small board backgrounds when won */
+  .small-board.X-won { background-color: rgba(255, 0, 0, 0.2); } /* Red tint */
+  .small-board.O-won { background-color: rgba(0, 0, 255, 0.2); } /* Blue tint */
+  
+  /* Overlay of symbol */
   .won-overlay {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 60px;
     font-weight: bold;
     pointer-events: none;
-    background: rgba(255, 255, 255, 0);
+    background: none;
   }
+
+  /* Colour of overlay symbols */
   .won-overlay.X { color: #FF4136; } /* Red for X */
   .won-overlay.O { color: #0074D9; } /* Blue for O */
   .won-overlay.draw { color: gray; } /* Gray for draw */
 
   .cell.X { color: #FF4136; } /* Red X */
   .cell.O { color: #0074D9; } /* Blue O */
-
-  .small-board.X-won {
-    background-color: rgba(255, 0, 0, 0.1);
-  }
-  .small-board.O-won {
-    background-color: rgba(0, 0, 255, 0.1);
-  }
   
 </style>
 </head>
@@ -159,14 +155,14 @@ function cellClick(e) {
   if (winner) {
     boardStatus[boardIndex] = winner;
 
+  // Class for background colour
+  e.target.parentElement.classList.add(`${winner}-won`);
+    
     //Show overlay symbol
     const overlay = document.createElement('div');
     overlay.classList.add('won-overlay', winner);
     overlay.textContent = winner;
     e.target.parentElement.appendChild(overlay);
-
-    // Class for background colour / styling
-    e.target.parentElement.classList.add(`${winner}-won`);
     
   } else if (boards[boardIndex].every(c => c)) {
     boardStatus[boardIndex] = 'draw';

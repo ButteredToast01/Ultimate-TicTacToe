@@ -174,7 +174,7 @@ function cellClick(e) {
   // Check big board result
   const bigWinner = checkWinner(boardStatus.map(s => s==='draw' ? null : s));
   if (bigWinner) {
-    messageElement.textContent = `Player ${bigWinner} wins the game!`;
+    messageElement.textContent = `🎉 Player ${bigWinner} wins the game! 🎉`;
     turnElement.textContent = '';
     document.querySelectorAll('.small-board').forEach(b => b.classList.remove('active-board'));
     return;

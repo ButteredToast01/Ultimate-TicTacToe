@@ -64,15 +64,16 @@
 
   /* Overlay when a small board is won */
   .won-overlay {
-    background: rgba(255,255,255,0.2); /* 20% opaque white */
-    color: black;
-    font-size: 60px; 
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
     font-weight: bold;
     pointer-events: none;
-    position: absolute;
-    top: 50%; 
-    left: 50%;
-    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0);
   }
   .won-overlay.X { color: #FF4136; } /* Red for X */
   .won-overlay.O { color: #0074D9; } /* Blue for O */
